@@ -3,13 +3,11 @@
 export const dynamic = 'force-dynamic'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
 export default function LoginPage() {
-  const supabase = createClient()
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -20,18 +18,16 @@ export default function LoginPage() {
     if (!email.trim()) return
     setLoading(true)
     setError('')
+    // Lazy init — only runs in browser, never during build prerender
+    const { createClient } = await import('@/lib/supabase/client')
+    const supabase = createClient()
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     })
     setLoading(false)
-    if (error) {
-      setError(error.message)
-    } else {
-      setSent(true)
-    }
+    if (error) setError(error.message)
+    else setSent(true)
   }
 
   return (
@@ -50,7 +46,7 @@ export default function LoginPage() {
               <div className="text-3xl">📬</div>
               <p className="font-medium">Check your email</p>
               <p className="text-sm text-muted-foreground">
-                We sent a magic link to <strong>{email}</strong>. Click it to sign in — no password needed.
+                We sent a magic link to <strong>{email}</strong>. Click it to sign in.
               </p>
               <Button variant="ghost" className="text-xs" onClick={() => setSent(false)}>
                 Use a different email
