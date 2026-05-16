@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState } from 'react'
 import ListingCard from '@/components/ListingCard'
 import GroupDiscovery from '@/components/GroupDiscovery'
