@@ -1,6 +1,8 @@
 import ZeroEntropy from 'zeroentropy'
 
-const client = new ZeroEntropy({ apiKey: process.env.ZEROENTROPY_API_KEY })
+function getClient() {
+  return new ZeroEntropy({ apiKey: process.env.ZEROENTROPY_API_KEY ?? '' })
+}
 
 // Build a query string from user preferences for reranking
 export function preferencesToQuery(prefs: {
@@ -63,7 +65,7 @@ export async function rerankListings(
 ): Promise<RankedListing[]> {
   if (!listings.length) return []
 
-  const response = await client.models.rerank({
+  const response = await getClient().models.rerank({
     model: 'zerank-2',
     query,
     documents: listings.map(l => l.text),
