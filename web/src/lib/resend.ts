@@ -1,7 +1,9 @@
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM = process.env.RESEND_FROM_EMAIL ?? 'agent@apartmentagent.app'
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? '')
+}
+const FROM = () => process.env.RESEND_FROM_EMAIL ?? 'onboarding@resend.dev'
 
 export interface SendEmailResult {
   id: string | null
@@ -14,8 +16,8 @@ export async function sendOutreachEmail(params: {
   body: string
   replyTo?: string
 }): Promise<SendEmailResult> {
-  const { data, error } = await resend.emails.send({
-    from: FROM,
+  const { data, error } = await getResend().emails.send({
+    from: FROM(),
     to: params.to,
     subject: params.subject,
     text: params.body,
