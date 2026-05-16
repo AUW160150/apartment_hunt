@@ -1,0 +1,23 @@
+# Environment files (never commit secrets)
+**/.env
+**/.env.local
+**/.env*.local
+**/APi\ keys
+.claude/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/venv/
+**/.venv/
+
+# Node
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+
+# Misc
+.DS_Store
+*.pem
+*.tsbuildinfo
